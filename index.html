@@ -23,7 +23,7 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
+            min-height: 100vh; 
             color: var(--text-main);
         }
 
@@ -47,6 +47,8 @@
             max-width: 380px;
             border-top: 6px solid var(--djkn-gold);
             border-bottom: 2px solid var(--djkn-blue);
+            box-sizing: border-box;
+            margin: 15px;
         }
         .login-logo {
             height: 55px;
@@ -67,7 +69,6 @@
             margin-bottom: 20px; 
         }
         
-        /* Wrapper untuk Input Password & Tombol Mata */
         .password-wrapper {
             position: relative;
             width: 100%;
@@ -87,7 +88,6 @@
         }
         .login-card input:focus { border-color: var(--djkn-gold); }
         
-        /* Style Tombol Ikon Mata */
         .toggle-password {
             position: absolute;
             right: 12px;
@@ -102,9 +102,7 @@
             align-items: center;
             justify-content: center;
         }
-        .toggle-password:hover {
-            color: var(--djkn-blue);
-        }
+        .toggle-password:hover { color: var(--djkn-blue); }
 
         .login-card button.btn-login {
             width: 100%;
@@ -123,8 +121,10 @@
         /* --- KOTAK UTAMA DASHBOARD PRESENTASI --- */
         #main-app {
             display: none;
-            width: 95%;
+            width: 100%;
             max-width: 1080px;
+            padding: 15px;
+            box-sizing: border-box;
         }
         .dashboard-container { 
             background-color: var(--card-bg); 
@@ -134,9 +134,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 560px;
+            min-height: 520px;
             border-top: 8px solid var(--djkn-gold); 
             border: 1px solid var(--border-color);
+            box-sizing: border-box;
         }
         
         .dashboard-header { 
@@ -146,6 +147,8 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .logo-title-group {
             display: flex;
@@ -191,7 +194,7 @@
         ul { margin-top: 2px; padding-left: 18px; }
         li { margin-bottom: 4px; }
         
-        /* Layout Grid 2 Foto Sampingan Aset */
+        /* Layout Grid 2 Foto Sampingan Aset (Default Desktop) */
         .slide-grid-dual {
             display: flex;
             gap: 20px;
@@ -224,7 +227,7 @@
             font-weight: 500;
         }
 
-        /* Layout Khusus 2 Maps Berjajar (Lampura & Lamteng) */
+        /* Layout Khusus 2 Maps Berjajar */
         .maps-grid-duo {
             display: flex;
             gap: 20px;
@@ -240,7 +243,7 @@
         }
         .maps-card img {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             border-radius: 6px;
             border: 2px solid var(--djkn-gold);
@@ -258,7 +261,7 @@
             line-height: 1.3;
         }
 
-        /* Layout Khusus 1 Maps Besar (Kota Metro) */
+        /* Layout Khusus 1 Maps Besar */
         .maps-single-container {
             display: flex;
             flex-direction: column;
@@ -273,7 +276,7 @@
         }
         .maps-single-container img {
             width: 100%;
-            height: 240px;
+            height: 220px;
             object-fit: cover;
             border-radius: 6px;
             border: 2px solid var(--djkn-gold);
@@ -294,9 +297,7 @@
             padding: 15px;
             border-radius: 8px;
         }
-        .chart-bar-container {
-            margin-bottom: 12px;
-        }
+        .chart-bar-container { margin-bottom: 12px; }
         .chart-label {
             font-size: 12px;
             font-weight: 700;
@@ -333,7 +334,7 @@
             align-items: center; 
             border-top: 1px solid #E2E8F0; 
             padding-top: 10px; 
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .btn-nav { 
             background-color: var(--djkn-blue); 
@@ -346,12 +347,34 @@
             font-weight: bold;
         }
         .btn-nav:hover { background-color: var(--djkn-blue-hover); }
-        
         .btn-nav:disabled {
             background-color: #E2E8F0 !important;
             color: #94A3B8 !important;
             border-color: #CBD5E1 !important;
             cursor: not-allowed;
+        }
+
+        /* --- RESPONSIF KHUSUS HP (Layar di bawah 768px) --- */
+        @media (max-w: 768px), (max-width: 768px) {
+            .dashboard-container { padding: 15px; min-height: auto; }
+            .slide-grid-dual {
+                flex-direction: column;
+            }
+            .slide-images-dual {
+                width: 100%;
+                flex-direction: row;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .img-card img {
+                height: 130px;
+            }
+            .maps-grid-duo {
+                flex-direction: column;
+            }
+            .overview-grid {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -367,7 +390,6 @@
             <div class="password-wrapper">
                 <input type="password" id="password-input" placeholder="••••••••••••">
                 <button type="button" class="toggle-password" id="toggle-btn" onclick="togglePasswordVisibility()" title="Lihat Password">
-                    <!-- Ikon Mata Tertutup (Default) -->
                     <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                         <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -412,14 +434,12 @@
 
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                // Ubah ke ikon mata terbuka
                 eyeIcon.innerHTML = `
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 `;
             } else {
                 passwordInput.type = 'password';
-                // Kembalikan ke ikon mata tertutup (dicoret)
                 eyeIcon.innerHTML = `
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                     <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -557,12 +577,12 @@
                     <div class="maps-grid-duo">
                         <div class="maps-card">
                             <div class="maps-title">Stasiun Geofisika Kotabumi</div>
-                            <img src="maps_lampura_geofisika.jpg" alt="Maps Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_geofisika.jpg</text></svg>'">
+                            <img src="maps_lampura_geofisika.jpg" alt="Maps Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\\'200\\' height=\\'180\\' viewBox=\\'0 0 200 180\\'><rect width=\\'200\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_geofisika.jpg</text></svg>'">
                             <div class="maps-desc">Titik lokasi aset BMN Stasiun Geofisika di Lampung Utara.</div>
                         </div>
                         <div class="maps-card">
                             <div class="maps-title">BPS Lampung Utara</div>
-                            <img src="maps_lampura_bps.jpg" alt="Maps BPS Lampura" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_bps.jpg</text></svg>'">
+                            <img src="maps_lampura_bps.jpg" alt="Maps BPS Lampura" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\\'200\\' height=\\'180\\' viewBox=\\'0 0 200 180\\'><rect width=\\'200\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_bps.jpg</text></svg>'">
                             <div class="maps-desc">Titik lokasi aset BMN BPS di wilayah Lampung Utara.</div>
                         </div>
                     </div>
@@ -574,12 +594,12 @@
                     <div class="maps-grid-duo">
                         <div class="maps-card">
                             <div class="maps-title">Lapas Anak Kotabumi</div>
-                            <img src="maps_lamteng_lapas.jpg" alt="Maps Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_lapas.jpg</text></svg>'">
+                            <img src="maps_lamteng_lapas.jpg" alt="Maps Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\\'200\\' height=\\'180\\' viewBox=\\'0 0 200 180\\'><rect width=\\'200\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_lapas.jpg</text></svg>'">
                             <div class="maps-desc">Titik lokasi aset BMN Lapas Anak di Lampung Tengah.</div>
                         </div>
                         <div class="maps-card">
                             <div class="maps-title">KPPBC TMP B Bandar Lampung</div>
-                            <img src="maps_lamteng_kppbc.jpg" alt="Maps KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_kppbc.jpg</text></svg>'">
+                            <img src="maps_lamteng_kppbc.jpg" alt="Maps KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\\'200\\' height=\\'180\\' viewBox=\\'0 0 200 180\\'><rect width=\\'200\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_kppbc.jpg</text></svg>'">
                             <div class="maps-desc">Titik lokasi aset BMN KPPBC TMP B di Lampung Tengah.</div>
                         </div>
                     </div>
@@ -589,7 +609,7 @@
                 title: "Dokumentasi Peta Lokasi: Kota Metro",
                 content: `
                     <div class="maps-single-container">
-                        <img src="maps_metro.jpg" alt="Maps Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'240\\' viewBox=\\'0 0 300 240\\'><rect width=\\'300\\' height=\\'240\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>maps_metro.jpg</text></svg>'">
+                        <img src="maps_metro.jpg" alt="Maps Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'220\\' viewBox=\\'0 0 300 220\\'><rect width=\\'300\\' height=\\'220\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>maps_metro.jpg</text></svg>'">
                         <div style="font-weight: 700; color: var(--djkn-blue); font-size: 13px; margin-bottom: 3px;">BPS Kota Metro</div>
                         <div style="font-size: 11.5px; color: #64748B;">Titik lokasi aset BPS Kota Metro di Jl. Haji Agus Salim, Imopuro.</div>
                     </div>
@@ -618,17 +638,8 @@
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
 
-            if (currentSlide === 0) {
-                btnPrev.disabled = true;
-            } else {
-                btnPrev.disabled = false;
-            }
-
-            if (currentSlide === slides.length - 1) {
-                btnNext.disabled = true;
-            } else {
-                btnNext.disabled = false;
-            }
+            if (currentSlide === 0) { btnPrev.disabled = true; } else { btnPrev.disabled = false; }
+            if (currentSlide === slides.length - 1) { btnNext.disabled = true; } else { btnNext.disabled = false; }
         }
 
         function nextSlide() {
