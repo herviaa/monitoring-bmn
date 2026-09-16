@@ -122,7 +122,7 @@
         #main-app {
             display: none;
             width: 100%;
-            max-width: 1080px;
+            max-width: 900px;
             padding: 15px;
             box-sizing: border-box;
         }
@@ -194,38 +194,43 @@
         ul { margin-top: 2px; padding-left: 18px; }
         li { margin-bottom: 4px; }
         
-        /* Layout Grid Aset: Teks di Kiri, Foto Berderet Kebawah (Atas-Bawah) di Kanan */
-        .slide-grid-dual {
+        /* Layout Atas-Bawah untuk Rincian Aset (Teks di atas, Foto berderet ke bawah) */
+        .slide-stack-container {
             display: flex;
-            gap: 20px;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
         }
-        .slide-text-dual { flex: 1.3; }
-        .slide-images-dual {
+        .slide-images-stack {
             display: flex;
-            flex-direction: column; /* Mengatur foto jadi atas-bawah */
+            flex-direction: column; /* Foto disusun vertikal (atas-bawah) */
             gap: 12px;
-            width: 260px;
-            flex-shrink: 0;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto; /* Posisi di tengah */
         }
         .img-card {
             width: 100%;
             text-align: center;
+            background: #F8FAFC;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
         }
         .img-card img {
             width: 100%;
-            height: 135px;
+            height: 180px;
             object-fit: cover;
             border-radius: 6px;
             border: 2px solid var(--djkn-gold);
             box-shadow: 0 3px 6px rgba(0,0,0,0.05);
         }
         .img-caption { 
-            font-size: 11px; 
-            color: #64748B; 
-            margin-top: 3px; 
+            font-size: 11.5px; 
+            color: var(--djkn-blue); 
+            margin-top: 5px; 
             font-style: italic; 
-            font-weight: 500;
+            font-weight: 700;
         }
 
         /* Layout Khusus 2 Maps Berjajar */
@@ -355,16 +360,9 @@
             cursor: not-allowed;
         }
 
-        /* --- RESPONSIF KHUSUS HP (Layar di bawah 768px) --- */
+        /* --- RESPONSIF KHUSUS HP --- */
         @media (max-width: 768px) {
             .dashboard-container { padding: 15px; min-height: auto; }
-            .slide-grid-dual {
-                flex-direction: column;
-            }
-            .slide-images-dual {
-                width: 100%;
-                margin-top: 12px;
-            }
             .maps-grid-duo {
                 flex-direction: column;
             }
@@ -500,20 +498,20 @@
             {
                 title: "1. Wilayah Kabupaten Lampung Utara (4 Unit)",
                 content: `
-                    <div class="slide-grid-dual">
-                        <div class="slide-text-dual">
+                    <div class="slide-stack-container">
+                        <div>
                             <ul>
                                 <li><b>Stasiun Geofisika Kotabumi (3 Unit):</b> 1 Tanah (100 m²) & 2 Gedung Pemancar (Rusak Berat). Berada di tengah genangan air/area tambang. <i>Tindak Lanjut:</i> Permohonan lelang hak menikmati (ND-92/KNL.0503/2025).</li>
                                 <li><b>BPS Lampung Utara (1 Unit):</b> Tanah seluas 577 m² di Jl. Raden Intan. Pinggir sungai & tikungan tajam (rawan banjir). <i>Tindak Lanjut:</i> Proses lelang hak menikmati.</li>
                             </ul>
                         </div>
-                        <div class="slide-images-dual">
+                        <div class="slide-images-stack">
                             <div class="img-card">
-                                <img src="aset_lampura_1.jpg" alt="Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lampura_1.jpg</text></svg>'">
+                                <img src="aset_lampura_1.jpg" alt="Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_lampura_1.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">Stasiun Geofisika</div>
                             </div>
                             <div class="img-card">
-                                <img src="aset_lampura_2.jpg" alt="BPS" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lampura_2.jpg</text></svg>'">
+                                <img src="aset_lampura_2.jpg" alt="BPS" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_lampura_2.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">Tanah BPS Lampura</div>
                             </div>
                         </div>
@@ -523,20 +521,20 @@
             {
                 title: "2. Wilayah Kabupaten Lampung Tengah (3 Unit)",
                 content: `
-                    <div class="slide-grid-dual">
-                        <div class="slide-text-dual">
+                    <div class="slide-stack-container">
+                        <div>
                             <ul>
                                 <li><b>Lapas Anak Kotabumi (2 Unit):</b> Tanah kosong seluas 4.720 m² & 22.270 m² di Way Pengubuan. Dimanfaatkan melalui skema sewa kepada pihak ketiga (Sdr. Angga Rayen Vratama) selama 3 tahun.</li>
                                 <li><b>KPPBC TMP B Bandar Lampung (1 Unit):</b> Tanah seluas 22.270 m² di Bandar Surabaya. Akses jalan sulit dan rawan terendam air. <i>Tindak Lanjut:</i> Permohonan jadwal lelang.</li>
                             </ul>
                         </div>
-                        <div class="slide-images-dual">
+                        <div class="slide-images-stack">
                             <div class="img-card">
-                                <img src="aset_lamteng_1.jpg" alt="Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lamteng_1.jpg</text></svg>'">
+                                <img src="aset_lamteng_1.jpg" alt="Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_lamteng_1.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">Lapas Anak Kotabumi</div>
                             </div>
                             <div class="img-card">
-                                <img src="aset_lamteng_2.jpg" alt="KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lamteng_2.jpg</text></svg>'">
+                                <img src="aset_lamteng_2.jpg" alt="KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_lamteng_2.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">KPPBC TMP B</div>
                             </div>
                         </div>
@@ -546,21 +544,21 @@
             {
                 title: "3. Wilayah Kota Metro (2 Unit)",
                 content: `
-                    <div class="slide-grid-dual">
-                        <div class="slide-text-dual">
+                    <div class="slide-stack-container">
+                        <div>
                             <ul>
                                 <li><b>BPS Kota Metro (2 Unit):</b> Tanah (291 m²) & Bangunan Kantor (179 m²) di Jl. Haji Agus Salim, Imopuro.</li>
                                 <li><b>Bentuk Optimalisasi:</b> Disewakan kepada <b>8 penyewa perorangan</b> sesuai KMK Nomor 50/MK/KNL.0503/2026.</li>
                                 <li><b>Nilai Kontrak:</b> Rp409.487.000,00 untuk jangka waktu 2 tahun (s.d. Juli 2028).</li>
                             </ul>
                         </div>
-                        <div class="slide-images-dual">
+                        <div class="slide-images-stack">
                             <div class="img-card">
-                                <img src="aset_metro_1.jpg" alt="Tanah Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_metro_1.jpg</text></svg>'">
+                                <img src="aset_metro_1.jpg" alt="Tanah Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_metro_1.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">Tanah BPS Metro</div>
                             </div>
                             <div class="img-card">
-                                <img src="aset_metro_2.jpg" alt="Gedung Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'260\\' height=\\'135\\' viewBox=\\'0 0 260 135\\'><rect width=\\'260\\' height=\\'135\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_metro_2.jpg</text></svg>'">
+                                <img src="aset_metro_2.jpg" alt="Gedung Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'180\\' viewBox=\\'0 0 400 180\\'><rect width=\\'400\\' height=\\'180\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>aset_metro_2.jpg (Tidak Ditemukan)</text></svg>'">
                                 <div class="img-caption">Gedung BPS Metro</div>
                             </div>
                         </div>
