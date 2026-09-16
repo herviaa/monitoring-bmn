@@ -301,37 +301,6 @@
             color: #FFFFFF;
         }
 
-        /* Tampilan Slide Penutup */
-        .closing-slide {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 100%;
-            padding: 30px 0;
-        }
-        .closing-slide h2 {
-            color: var(--djkn-blue);
-            font-size: 26px;
-            margin-bottom: 8px;
-            font-weight: 800;
-        }
-        .closing-slide p {
-            color: #64748B;
-            font-size: 15px;
-            margin-bottom: 20px;
-        }
-        .closing-badge {
-            background-color: #FEF3C7;
-            color: var(--djkn-blue);
-            border: 1px solid var(--djkn-gold);
-            padding: 8px 22px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 13px;
-        }
-
         .footer-nav { 
             display: flex; 
             justify-content: space-between; 
@@ -358,15 +327,6 @@
             border-color: #CBD5E1 !important;
             cursor: not-allowed;
         }
-
-        #end-notice {
-            display: none;
-            color: #D97706;
-            font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
     </style>
 </head>
 <body>
@@ -392,7 +352,7 @@
                         <img src="Logo.png" alt="Logo Instansi" class="logo-img" onerror="this.style.display='none'">
                         <h3>KPKNL Metro • Pengelolaan BMN Eks Idle</h3>
                     </div>
-                    <span id="slide-counter">Slide 1 dari 10</span>
+                    <span id="slide-counter">Slide 1 dari 9</span>
                 </div>
                 
                 <h1 id="slide-title">Judul Slide</h1>
@@ -401,7 +361,6 @@
             
             <div class="footer-nav">
                 <button class="btn-nav" id="btn-prev" onclick="prevSlide()">← Sebelumnya</button>
-                <span id="end-notice">Akhir Presentasi</span>
                 <button class="btn-nav" id="btn-next" onclick="nextSlide()">Selanjutnya →</button>
             </div>
         </div>
@@ -588,16 +547,6 @@
                         <li>Optimalisasi aset BPS Kota Metro menjadi salah satu contoh sukses kontribusi PNBP melalui penyewaan kepada pihak perorangan.</li>
                     </ul>
                 `
-            },
-            {
-                title: "Penutup",
-                content: `
-                    <div class="closing-slide">
-                        <h2>Terima Kasih</h2>
-                        <p>Demikian pemaparan hasil monitoring BMN Eks Idle KPKNL Metro.</p>
-                        <div class="closing-badge">Seksi Pengelolaan Kekayaan Negara • KPKNL Metro</div>
-                    </div>
-                `
             }
         ];
 
@@ -610,7 +559,6 @@
 
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
-            const endNotice = document.getElementById('end-notice');
 
             if (currentSlide === 0) {
                 btnPrev.disabled = true;
@@ -620,10 +568,8 @@
 
             if (currentSlide === slides.length - 1) {
                 btnNext.disabled = true;
-                endNotice.style.display = 'inline-block';
             } else {
                 btnNext.disabled = false;
-                endNotice.style.display = 'none';
             }
         }
 
