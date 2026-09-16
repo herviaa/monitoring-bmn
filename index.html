@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring BMN Eks Idle - DJKN KPKNL Metro</title>
+    <style>
+        :root {
+            --djkn-blue: #0A2240;       
+            --djkn-blue-hover: #13345d;
+            --djkn-gold: #D4AF37;       
+            --bg-light: #F0F4F8;
+            --card-bg: #FFFFFF;
+            --text-main: #2D3748;
+            --border-color: #CBD5E1;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-light); 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            color: var(--text-main);
+        }
+
+        /* --- HALAMAN LOGIN --- */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .login-card {
+            background-color: var(--card-bg);
+            padding: 40px 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(10, 34, 64, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            border-top: 6px solid var(--djkn-gold);
+            border-bottom: 2px solid var(--djkn-blue);
+        }
+        .login-logo {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+        .login-card h2 { 
+            color: var(--djkn-blue); 
+            margin-top: 0; 
+            margin-bottom: 5px;
+            font-size: 22px; 
+            font-weight: 700;
+        }
+        .login-card p { 
+            color: #64748B; 
+            font-size: 14px; 
+            margin-bottom: 20px; 
+        }
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-align: center;
+            background-color: #F8FAFC;
+            color: var(--text-main);
+            outline: none;
+        }
+        .login-card input:focus { border-color: var(--djkn-gold); }
+        .login-card button {
+            width: 100%;
+            background-color: var(--djkn-blue);
+            color: var(--djkn-gold);
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-card button:hover { background-color: var(--djkn-blue-hover); }
+        #error-msg { color: #DC2626; font-size: 13px; margin-top: 10px; display: none; font-weight: 500; }
+
+        /* --- KOTAK UTAMA DASHBOARD PRESENTASI --- */
+        #main-app {
+            display: none;
+            width: 95%;
+            max-width: 1080px;
+        }
+        .dashboard-container { 
+            background-color: var(--card-bg); 
+            padding: 25px 35px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(10, 34, 64, 0.08); 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 560px;
+            border-top: 8px solid var(--djkn-gold); 
+            border: 1px solid var(--border-color);
+        }
+        
+        .dashboard-header { 
+            border-bottom: 2px solid #E2E8F0; 
+            padding-bottom: 8px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-img {
+            height: 35px;
+            width: auto;
+            object-fit: contain;
+        }
+        .dashboard-header h3 { 
+            margin: 0; 
+            color: var(--djkn-blue); 
+            font-size: 13px; 
+            letter-spacing: 1px;
+            text-transform: uppercase; 
+            font-weight: 700;
+        }
+        #slide-counter { 
+            font-weight: 700; 
+            color: var(--djkn-blue); 
+            font-size: 13px; 
+            background-color: #FEF3C7; 
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #F59E0B;
+        }
+
+        h1 { 
+            color: var(--djkn-blue); 
+            margin-top: 0; 
+            margin-bottom: 10px; 
+            font-size: 19px; 
+            font-weight: 700;
+        }
+        .content-box { 
+            font-size: 13px; 
+            color: var(--text-main); 
+            line-height: 1.45; 
+            flex-grow: 1;
+        }
+        ul { margin-top: 2px; padding-left: 18px; }
+        li { margin-bottom: 4px; }
+        
+        /* Layout Grid 2 Foto Sampingan Aset */
+        .slide-grid-dual {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .slide-text-dual { flex: 1.2; }
+        .slide-images-dual {
+            display: flex;
+            gap: 12px;
+            width: 420px;
+            flex-shrink: 0;
+        }
+        .img-card {
+            flex: 1;
+            text-align: center;
+        }
+        .img-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid var(--djkn-gold);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+        .img-caption { 
+            font-size: 11px; 
+            color: #64748B; 
+            margin-top: 4px; 
+            font-style: italic; 
+            font-weight: 500;
+        }
+
+        /* Layout Khusus 2 Maps Berjajar (Lampura & Lamteng) */
+        .maps-grid-duo {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .maps-card {
+            flex: 1;
+            text-align: center;
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .maps-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid var(--djkn-gold);
+        }
+        .maps-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--djkn-blue);
+            margin-bottom: 6px;
+        }
+        .maps-desc {
+            font-size: 11px;
+            color: #64748B;
+            margin-top: 6px;
+            line-height: 1.3;
+        }
+
+        /* Layout Khusus 1 Maps Besar (Kota Metro) */
+        .maps-single-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .maps-single-container img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid var(--djkn-gold);
+            margin-bottom: 8px;
+        }
+
+        /* Layout Overview Grafik */
+        .overview-grid {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .overview-text { flex: 1.3; }
+        .overview-chart {
+            flex: 1;
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .chart-bar-container {
+            margin-bottom: 12px;
+        }
+        .chart-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--djkn-blue);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .chart-bar-bg {
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            height: 18px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .chart-bar-fill {
+            background-color: var(--djkn-gold);
+            height: 100%;
+            text-align: right;
+            padding-right: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--djkn-blue);
+            line-height: 18px;
+        }
+        .chart-bar-fill.blue {
+            background-color: var(--djkn-blue);
+            color: #FFFFFF;
+        }
+
+        /* Tampilan Slide Penutup */
+        .closing-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            padding: 30px 0;
+        }
+        .closing-slide h2 {
+            color: var(--djkn-blue);
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+        .closing-slide p {
+            color: #64748B;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .closing-badge {
+            background-color: #FEF3C7;
+            color: var(--djkn-blue);
+            border: 1px solid var(--djkn-gold);
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .footer-nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-top: 1px solid #E2E8F0; 
+            padding-top: 10px; 
+            margin-top: 10px;
+        }
+        .btn-nav { 
+            background-color: var(--djkn-blue); 
+            color: var(--djkn-gold); 
+            border: 1px solid var(--djkn-gold);
+            padding: 8px 18px; 
+            font-size: 13px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        .btn-nav:hover { background-color: var(--djkn-blue-hover); }
+        
+        .btn-nav:disabled {
+            background-color: #E2E8F0 !important;
+            color: #94A3B8 !important;
+            border-color: #CBD5E1 !important;
+            cursor: not-allowed;
+        }
+
+        #end-notice {
+            display: none;
+            color: #D97706;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <img src="logo.png" alt="Logo Instansi" class="login-logo" onerror="this.style.display='none'">
+            <h2>KPKNL METRO</h2>
+            <p>Masukkan password untuk mengakses data monitoring.</p>
+            <input type="password" id="password-input" placeholder="••••••••••••">
+            <button onclick="checkPassword()">MASUK APLIKASI</button>
+            <div id="error-msg">Password salah! Silakan coba lagi.</div>
+        </div>
+    </div>
+
+    <!-- UTAMA -->
+    <div id="main-app">
+        <div class="dashboard-container">
+            <div>
+                <div class="dashboard-header">
+                    <div class="logo-title-group">
+                        <img src="logo.png" alt="Logo Instansi" class="logo-img" onerror="this.style.display='none'">
+                        <h3>KPKNL Metro • Pengelolaan BMN Eks Idle</h3>
+                    </div>
+                    <span id="slide-counter">Slide 1 dari 10</span>
+                </div>
+                
+                <h1 id="slide-title">Judul Slide</h1>
+                <div class="content-box" id="slide-content"></div>
+            </div>
+            
+            <div class="footer-nav">
+                <button class="btn-nav" id="btn-prev" onclick="prevSlide()">← Sebelumnya</button>
+                <span id="end-notice">Akhir Presentasi</span>
+                <button class="btn-nav" id="btn-next" onclick="nextSlide()">Selanjutnya →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD_BENAR = "kpknlmetro2026";
+
+        function checkPassword() {
+            const inputVal = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            if (inputVal === PASSWORD_BENAR) {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                updateSlide();
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        document.getElementById('password-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { checkPassword(); }
+        });
+
+        const slides = [
+            {
+                title: "Profil BMN Eks BMN Idle KPKNL Metro",
+                content: `
+                    <p><b>Periode Laporan:</b> Semester I Tahun 2026</p>
+                    <p><b>Instansi Pengelola:</b> Kantor Pelayanan Kekayaan Negara dan Lelang (KPKNL) Metro</p>
+                    <p><b>Dasar Hukum:</b> Peraturan Menteri Keuangan Nomor 71/PMK.06/2016 tentang Pengelolaan BMN yang Tidak Digunakan untuk Tusi Kementerian/Lembaga.</p>
+                    <p style="color: #64748B; font-style: italic; margin-top: 15px;">Gunakan tombol "Selanjutnya" di bagian bawah untuk meninjau data rincian aset.</p>
+                `
+            },
+            {
+                title: "Overview & Resume Total Aset",
+                content: `
+                    <div class="overview-grid">
+                        <div class="overview-text">
+                            <p>KPKNL Metro secara keseluruhan mengelola <b>9 (sembilan) unit BMN Eks BMN Idle</b> yang terdistribusi di tiga wilayah kerja:</p>
+                            <ul>
+                                <li><b>Kabupaten Lampung Utara:</b> 4 Unit (Stasiun Geofisika & BPS)</li>
+                                <li><b>Kabupaten Lampung Tengah:</b> 3 Unit (Lapas Anak & KPPBC TMP B)</li>
+                                <li><b>Kota Metro:</b> 2 Unit (BPS Kota Metro)</li>
+                            </ul>
+                        </div>
+                        <div class="overview-chart">
+                            <div class="chart-bar-container">
+                                <div class="chart-label"><span>Komposisi Tanah</span> <span>6 Unit (67%)</span></div>
+                                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width: 67%;">6 Unit</div></div>
+                            </div>
+                            <div class="chart-bar-container">
+                                <div class="chart-label"><span>Komposisi Bangunan</span> <span>3 Unit (33%)</span></div>
+                                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width: 33%;">3 Unit</div></div>
+                            </div>
+                            <p style="font-size: 11px; color: #64748B; text-align: center; margin: 5px 0 0 0;">Total Keseluruhan: 9 Unit BMN</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "1. Wilayah Kabupaten Lampung Utara (4 Unit)",
+                content: `
+                    <div class="slide-grid-dual">
+                        <div class="slide-text-dual">
+                            <ul>
+                                <li><b>Stasiun Geofisika Kotabumi (3 Unit):</b> 1 Tanah (100 m²) & 2 Gedung Pemancar (Rusak Berat). Berada di tengah genangan air/area tambang. <i>Tindak Lanjut:</i> Permohonan lelang hak menikmati (ND-92/KNL.0503/2025).</li>
+                                <li><b>BPS Lampung Utara (1 Unit):</b> Tanah seluas 577 m² di Jl. Raden Intan. Pinggir sungai & tikungan tajam (rawan banjir). <i>Tindak Lanjut:</i> Proses lelang hak menikmati.</li>
+                            </ul>
+                        </div>
+                        <div class="slide-images-dual">
+                            <div class="img-card">
+                                <img src="aset_lampura_1.jpg" alt="Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lampura_1.jpg</text></svg>'">
+                                <div class="img-caption">Stasiun Geofisika</div>
+                            </div>
+                            <div class="img-card">
+                                <img src="aset_lampura_2.jpg" alt="BPS" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lampura_2.jpg</text></svg>'">
+                                <div class="img-caption">Tanah BPS Lampura</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "2. Wilayah Kabupaten Lampung Tengah (3 Unit)",
+                content: `
+                    <div class="slide-grid-dual">
+                        <div class="slide-text-dual">
+                            <ul>
+                                <li><b>Lapas Anak Kotabumi (2 Unit):</b> Tanah kosong seluas 4.720 m² & 22.270 m² di Way Pengubuan. Dimanfaatkan melalui skema sewa kepada pihak ketiga (Sdr. Angga Rayen Vratama) selama 3 tahun.</li>
+                                <li><b>KPPBC TMP B Bandar Lampung (1 Unit):</b> Tanah seluas 22.270 m² di Bandar Surabaya. Akses jalan sulit dan rawan terendam air. <i>Tindak Lanjut:</i> Permohonan jadwal lelang.</li>
+                            </ul>
+                        </div>
+                        <div class="slide-images-dual">
+                            <div class="img-card">
+                                <img src="aset_lamteng_1.jpg" alt="Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lamteng_1.jpg</text></svg>'">
+                                <div class="img-caption">Lapas Anak Kotabumi</div>
+                            </div>
+                            <div class="img-card">
+                                <img src="aset_lamteng_2.jpg" alt="KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_lamteng_2.jpg</text></svg>'">
+                                <div class="img-caption">KPPBC TMP B</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "3. Wilayah Kota Metro (2 Unit)",
+                content: `
+                    <div class="slide-grid-dual">
+                        <div class="slide-text-dual">
+                            <ul>
+                                <li><b>BPS Kota Metro (2 Unit):</b> Tanah (291 m²) & Bangunan Kantor (179 m²) di Jl. Haji Agus Salim, Imopuro.</li>
+                                <li><b>Bentuk Optimalisasi:</b> Disewakan kepada <b>8 penyewa perorangan</b> sesuai KMK Nomor 50/MK/KNL.0503/2026.</li>
+                                <li><b>Nilai Kontrak:</b> Rp409.487.000,00 untuk jangka waktu 2 tahun (s.d. Juli 2028).</li>
+                            </ul>
+                        </div>
+                        <div class="slide-images-dual">
+                            <div class="img-card">
+                                <img src="aset_metro_1.jpg" alt="Tanah Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_metro_1.jpg</text></svg>'">
+                                <div class="img-caption">Tanah BPS Metro</div>
+                            </div>
+                            <div class="img-card">
+                                <img src="aset_metro_2.jpg" alt="Gedung Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'180\\' height=\\'150\\' viewBox=\\'0 0 180 150\\'><rect width=\\'180\\' height=\\'150\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>aset_metro_2.jpg</text></svg>'">
+                                <div class="img-caption">Gedung BPS Metro</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Dokumentasi Peta Lokasi: Kab. Lampung Utara",
+                content: `
+                    <div class="maps-grid-duo">
+                        <div class="maps-card">
+                            <div class="maps-title">Stasiun Geofisika Kotabumi</div>
+                            <img src="maps_lampura_geofisika.jpg" alt="Maps Geofisika" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_geofisika.jpg</text></svg>'">
+                            <div class="maps-desc">Titik lokasi aset BMN Stasiun Geofisika di Lampung Utara.</div>
+                        </div>
+                        <div class="maps-card">
+                            <div class="maps-title">BPS Lampung Utara</div>
+                            <img src="maps_lampura_bps.jpg" alt="Maps BPS Lampura" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lampura_bps.jpg</text></svg>'">
+                            <div class="maps-desc">Titik lokasi aset BMN BPS di wilayah Lampung Utara.</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Dokumentasi Peta Lokasi: Kab. Lampung Tengah",
+                content: `
+                    <div class="maps-grid-duo">
+                        <div class="maps-card">
+                            <div class="maps-title">Lapas Anak Kotabumi</div>
+                            <img src="maps_lamteng_lapas.jpg" alt="Maps Lapas" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_lapas.jpg</text></svg>'">
+                            <div class="maps-desc">Titik lokasi aset BMN Lapas Anak di Lampung Tengah.</div>
+                        </div>
+                        <div class="maps-card">
+                            <div class="maps-title">KPPBC TMP B Bandar Lampung</div>
+                            <img src="maps_lamteng_kppbc.jpg" alt="Maps KPPBC" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'11\\'>maps_lamteng_kppbc.jpg</text></svg>'">
+                            <div class="maps-desc">Titik lokasi aset BMN KPPBC TMP B di Lampung Tengah.</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Dokumentasi Peta Lokasi: Kota Metro",
+                content: `
+                    <div class="maps-single-container">
+                        <img src="maps_metro.jpg" alt="Maps Metro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'240\\' viewBox=\\'0 0 300 240\\'><rect width=\\'300\\' height=\\'240\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%2364748B\\' font-size=\\'12\\'>maps_metro.jpg</text></svg>'">
+                        <div style="font-weight: 700; color: var(--djkn-blue); font-size: 13px; margin-bottom: 3px;">BPS Kota Metro</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Titik lokasi aset BPS Kota Metro di Jl. Haji Agus Salim, Imopuro.</div>
+                    </div>
+                `
+            },
+            {
+                title: "Kesimpulan & Catatan Pengelolaan",
+                content: `
+                    <p>Dari hasil pemantauan BMN Eks Idle di wilayah kerja KPKNL Metro, dapat disimpulkan beberapa poin penting:</p>
+                    <ul>
+                        <li>Sebagian besar aset yang berpotensi komersial telah didorong untuk optimalisasi melalui skema sewa maupun lelang hak menikmati.</li>
+                        <li>Aset yang berada di lokasi rawan (seperti genangan air, pinggir sungai, atau akses sulit) memerlukan pengawasan berkala dan koordinasi intensif.</li>
+                        <li>Optimalisasi aset BPS Kota Metro menjadi salah satu contoh sukses kontribusi PNBP melalui penyewaan kepada pihak perorangan.</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Penutup",
+                content: `
+                    <div class="closing-slide">
+                        <h2>Terima Kasih</h2>
+                        <p>Demikian pemaparan hasil monitoring BMN Eks Idle KPKNL Metro.</p>
+                        <div class="closing-badge">Seksi Pengelolaan Kekayaan Negara • KPKNL Metro</div>
+                    </div>
+                `
+            }
+        ];
+
+        let currentSlide = 0;
+
+        function updateSlide() {
+            document.getElementById('slide-title').innerText = slides[currentSlide].title;
+            document.getElementById('slide-content').innerHTML = slides[currentSlide].content;
+            document.getElementById('slide-counter').innerText = `Slide ${currentSlide + 1} dari ${slides.length}`;
+
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const endNotice = document.getElementById('end-notice');
+
+            if (currentSlide === 0) {
+                btnPrev.disabled = true;
+            } else {
+                btnPrev.disabled = false;
+            }
+
+            if (currentSlide === slides.length - 1) {
+                btnNext.disabled = true;
+                endNotice.style.display = 'inline-block';
+            } else {
+                btnNext.disabled = false;
+                endNotice.style.display = 'none';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+    </script>
+</body>
+</html>
